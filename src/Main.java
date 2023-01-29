@@ -10,8 +10,8 @@ public class Main {
 
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("Test1_4_4.txt"));
-            //bufferedReader = new BufferedReader(new FileReader("Test2_4_4_MixGrid.txt"));
+            //bufferedReader = new BufferedReader(new FileReader("Test1_4_4.txt"));
+            bufferedReader = new BufferedReader(new FileReader("Test2_4_4_MixGrid.txt"));
             //bufferedReader = new BufferedReader(new FileReader("Test3_31_31_kwadrat.txt"));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage() + " " + e.getCause());
@@ -97,45 +97,19 @@ public class Main {
         }
 
 
-
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage() + " " + e.getCause());
-//        }
-
         for(Node node : grid.getNodes()) {
             node.printCoordinates();
             System.out.println();
         }
 
-        Element element2 = new Element(2);
-        element2.fillTables();
-        element2.printTables();
-
         System.out.println();
         System.out.println("----------------------------------------------------------------------------");
         System.out.println();
-
-        Element element3 = new Element(3);
-        element3.fillTables();
-        element3.printTables();
-
-        System.out.println();
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.println();
-
-       // element2.calculateDerXNAndDerYN();
-       // element2.printDerXY();
-
-        System.out.println();
-        System.out.println("----------------------------------------------------------------------------");
-        System.out.println();
-
-        //element2.printHMatrix();
 
         grid.calculateElements();
-        SystemOfEquation systemOfEquation = new SystemOfEquation(nodesNumber);
-        systemOfEquation.calculateHgMatrix(grid);
-        systemOfEquation.printHgMatrix();
+        CalculationManager calculationManager = new CalculationManager(nodesNumber);
+        calculationManager.calculateHgMatrix(grid);
+        calculationManager.printHgMatrix();
 
         System.out.println();
         System.out.println("----------------------------------------------------------------------------");
@@ -157,22 +131,22 @@ public class Main {
         System.out.println("----------------------------------------------------------------------------");
         System.out.println();
 
-        systemOfEquation.calculateHbcMatrix(grid);
-        systemOfEquation.printHbcMatrix();
+        calculationManager.calculateHbcMatrix(grid);
+        calculationManager.printHbcMatrix();
 
         System.out.println();
         System.out.println("----------------------------------------------------------------------------");
         System.out.println();
 
-        systemOfEquation.calculatePVector(grid);
-        systemOfEquation.printPVector();
+        calculationManager.calculatePVector(grid);
+        calculationManager.printPVector();
 
         System.out.println();
         System.out.println("------------DOOOOOOOOOOOOOOOOOOPA---------------------------------------");
         System.out.println();
 
-        systemOfEquation.calculateCMatrix(grid);
-        systemOfEquation.printCMatrix();
+        calculationManager.calculateCMatrix(grid);
+        calculationManager.printCMatrix();
 
         System.out.println();
         System.out.println("--------------------------------DOOOOOOOOOOOPA-------------------------");
@@ -180,13 +154,13 @@ public class Main {
 
 
         System.out.println("Temperatury w kolejnych krokach");
-        double temp = systemOfEquation.calculateTemperature(grid, GlobalData.initialTemp);
+        double temp = calculationManager.calculateTemperature(grid, GlobalData.initialTemp);
         for(int i = GlobalData.simulationStepTime; i <= GlobalData.simulationTime; i += GlobalData.simulationStepTime) {
-            systemOfEquation.calculateHbcMatrix(grid);
-            systemOfEquation.calculateCMatrix(grid);
-            systemOfEquation.calculatePVector(grid);
+            calculationManager.calculateHbcMatrix(grid);
+            calculationManager.calculateCMatrix(grid);
+            calculationManager.calculatePVector(grid);
             System.out.println(temp);
-            temp = systemOfEquation.calculateTemperature(grid, temp);
+            temp = calculationManager.calculateTemperature(grid, temp);
         }
 
 

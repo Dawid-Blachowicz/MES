@@ -1,7 +1,6 @@
 public class Node {
     private double x;
     private double y;
-    private double t;
     private int BC;
 
     public Node(double x, double y) {
@@ -28,14 +27,6 @@ public class Node {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public double getT() {
-        return t;
-    }
-
-    public void setT(double t) {
-        this.t = t;
     }
 
     public int getBC() {

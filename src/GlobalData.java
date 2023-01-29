@@ -7,4 +7,5 @@ public class GlobalData {
     public static double conductivity;
     public static double density;
     public static double specificHeat;
+    public static int integralPointsNumber = 2;
 }

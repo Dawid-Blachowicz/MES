@@ -7,6 +7,9 @@ public class UniversalElement {
     public static final double[][] shapeFunctionEtaDerivativeFor2Points = new double[4][4];
     public static final double[][] shapeFunctionKsiDerivativeFor3Points = new double[9][4];
     public static final double[][] shapeFunctionEtaDerivativeFor3Points = new double[9][4];
+    public static final double[] integralPointsKsiFor3Points = new double[9];
+    public static final double[] integralPointsEtaFor3Points = new double[9];
+    public static final double[] weights = new double[2];
 
     public static void init() {
         calculateShapeFunctionValuesFor2Points();
@@ -15,6 +18,9 @@ public class UniversalElement {
         calculateShapeFunctionEtaDerivativeFor2Points();
         calculateShapeFunctionKsiDerivativeFor3Points();
         calculateShapeFunctionEtaDerivativeFor3Points();
+        setIntegralPointsKsiFor3Points();
+        setIntegralPointsEtaFor3Points();
+        setWeights();
         }
 
 
@@ -169,4 +175,34 @@ public class UniversalElement {
         shapeFunctionEtaDerivativeFor3Points[8][2] = 0.25 * (1 + (sqrt(3.0 / 5.0)));
         shapeFunctionEtaDerivativeFor3Points[8][3] = 0.25 * (1 - (sqrt(3.0 / 5.0)));
     }
+
+    private static void setWeights(){
+        weights[0] = 8.0 / 9.0;
+        weights[1] = 5.0 / 9.0;
+    }
+
+    private static void setIntegralPointsKsiFor3Points() {
+        integralPointsKsiFor3Points[0] = - sqrt(3.0 / 5.0);
+        integralPointsKsiFor3Points[1] = 0;
+        integralPointsKsiFor3Points[2] = sqrt(3.0 / 5.0);
+        integralPointsKsiFor3Points[3] = - sqrt(3.0 / 5.0);
+        integralPointsKsiFor3Points[4] = 0;
+        integralPointsKsiFor3Points[5] = sqrt(3.0 / 5.0);
+        integralPointsKsiFor3Points[6] = - sqrt(3.0 / 5.0);
+        integralPointsKsiFor3Points[7] = 0;
+        integralPointsKsiFor3Points[8] = sqrt(3.0 / 5.0);
+    }
+
+    private static void setIntegralPointsEtaFor3Points() {
+        integralPointsEtaFor3Points[0] = -sqrt(3.0 / 5.0);
+        integralPointsEtaFor3Points[1] = -sqrt(3.0 / 5.0);
+        integralPointsEtaFor3Points[2] = -sqrt(3.0 / 5.0);
+        integralPointsEtaFor3Points[3] = 0;
+        integralPointsEtaFor3Points[4] = 0;
+        integralPointsEtaFor3Points[5] = 0;
+        integralPointsEtaFor3Points[6] = sqrt(3.0 / 5.0);
+        integralPointsEtaFor3Points[7] = sqrt(3.0 / 5.0);
+        integralPointsEtaFor3Points[8] = sqrt(3.0 / 5.0);
+    }
+
 }

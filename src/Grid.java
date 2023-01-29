@@ -1,8 +1,8 @@
 public class Grid {
-    private int nodesNumber;
-    private int elementsNumber;
-    private Node[] nodes;
-    private Element[] elements;
+    private final int nodesNumber;
+    private final int elementsNumber;
+    private final Node[] nodes;
+    private final Element[] elements;
 
     public Grid(int nodesNumber, int elementsNumber) {
         this.nodesNumber = nodesNumber;
@@ -14,13 +14,11 @@ public class Grid {
 
     public void calculateElements() {
         for(int i = 0; i < elementsNumber; i++) {
-            elements[i].fillTables();
-            elements[i].calculateHMatrix(this.nodes);
+            elements[i].calculateHAndCMatrix(this.nodes);
             elements[i].setSides(this.nodes);
             System.out.println("C MATRIX FOR ELEMENT" + i);
             elements[i].printCMatrix();
-            elements[i].calculateHbcMatrix();
-            elements[i].calculatePVector();
+            elements[i].calculateHbcMatrixAndPVector();
         }
     }
 
@@ -28,31 +26,15 @@ public class Grid {
         return nodesNumber;
     }
 
-    public void setNodesNumber(int nodesNumber) {
-        this.nodesNumber = nodesNumber;
-    }
-
     public int getElementsNumber() {
         return elementsNumber;
-    }
-
-    public void setElementsNumber(int elementsNumber) {
-        this.elementsNumber = elementsNumber;
     }
 
     public Node[] getNodes() {
         return nodes;
     }
 
-    public void setNodes(Node[] nodes) {
-        this.nodes = nodes;
-    }
-
     public Element[] getElements() {
         return elements;
-    }
-
-    public void setElements(Element[] elements) {
-        this.elements = elements;
     }
 }

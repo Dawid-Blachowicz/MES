@@ -1,18 +1,16 @@
-public class SystemOfEquation {
+public class CalculationManager {
     private final double[][] hgMatrix;
     private final double[][] hbcMatrix;
     private final double[] pVector;
     private final double[][] cMatrix;
     private double[] t;
-    private final int numberOfNodes;
 
-    public SystemOfEquation(int numberOfNodes) {
+    public CalculationManager(int numberOfNodes) {
         this.hgMatrix = new double[numberOfNodes][numberOfNodes];
         this.hbcMatrix = new double[numberOfNodes][numberOfNodes];
         this.pVector = new double[numberOfNodes];
         this.cMatrix = new double[numberOfNodes][numberOfNodes];
         this.t = new double[numberOfNodes];
-        this.numberOfNodes = numberOfNodes;
     }
 
     public void calculateHgMatrix(Grid grid) {
@@ -60,6 +58,7 @@ public class SystemOfEquation {
     }
 
     public void printHgMatrix() {
+        System.out.println("HG MATRIX");
         for (double[] doubles : hgMatrix) {
             for (double aDouble : doubles) {
                 System.out.print(aDouble + " ");
@@ -69,6 +68,7 @@ public class SystemOfEquation {
     }
 
     public void printHbcMatrix() {
+        System.out.println("HBC MATRIX");
         for (double[] doubles : hbcMatrix) {
             for (double aDouble : doubles) {
                 System.out.print(aDouble + " ");
@@ -78,6 +78,7 @@ public class SystemOfEquation {
     }
 
     public void printPVector() {
+        System.out.println("P VECTOR");
         for(double doubles : pVector) {
             System.out.println(doubles);
         }

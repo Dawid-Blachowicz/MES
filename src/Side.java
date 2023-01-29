@@ -1,8 +1,9 @@
+import java.awt.*;
+
 import static java.lang.Math.sqrt;
 
 public class Side {
     private final int id;
-    private final int integralPointsNumber;
     private final double[][] integralPoints;
     private final double[][] shapeFunctionValues;
     private final double[][] hbcMatrix;
@@ -10,12 +11,11 @@ public class Side {
     private final double[] pVector;
     private final boolean BC;
 
-    public Side(int id, int integralPointsNumber, double length, boolean BC) {
+    public Side(int id, double length, boolean BC) {
         this.id = id;
-        this.integralPointsNumber = integralPointsNumber;
-        integralPoints = new double[3][integralPointsNumber];
-        setIntegralPoints(id);
-        shapeFunctionValues = new double[integralPointsNumber][4];
+        integralPoints = new double[3][GlobalData.integralPointsNumber];
+        setIntegralPoints();
+        shapeFunctionValues = new double[GlobalData.integralPointsNumber][4];
         setShapeFunctionValues();
         hbcMatrix = new double[4][4];
         this.length = length;
@@ -24,18 +24,16 @@ public class Side {
     }
 
     private void setShapeFunctionValues() {
-        if(integralPointsNumber == 2) {
-            for(int i = 0; i < 2; i++) {
+            for(int i = 0; i < GlobalData.integralPointsNumber; i++) {
                 shapeFunctionValues[i][0] = ShapeFunction.calculateN1(integralPoints[0][i], integralPoints[1][i]);
                 shapeFunctionValues[i][1] = ShapeFunction.calculateN2(integralPoints[0][i], integralPoints[1][i]);
                 shapeFunctionValues[i][2] = ShapeFunction.calculateN3(integralPoints[0][i], integralPoints[1][i]);
                 shapeFunctionValues[i][3] = ShapeFunction.calculateN4(integralPoints[0][i], integralPoints[1][i]);
             }
-        }
     }
 
-    private void setIntegralPoints(int id) {
-        if (integralPointsNumber == 2) {
+    private void setIntegralPoints() {
+        if (GlobalData.integralPointsNumber == 2) {
             if (id == 1) {
                 integralPoints[0][0] = -1 / sqrt(3);
                 integralPoints[1][0] = -1;
@@ -73,13 +71,72 @@ public class Side {
                 integralPoints[2][1] = 1;
             }
         }
+        else if (GlobalData.integralPointsNumber == 3) {
+            if (id == 1) {
+                integralPoints[0][0] = - sqrt(3.0 / 5.0);
+                integralPoints[1][0] = -1;
+                integralPoints[2][0] = 5.0 / 9.0;
+
+                integralPoints[0][1] = 0;
+                integralPoints[1][1] = -1;
+                integralPoints[2][1] = 8.0 / 9.0;
+
+                integralPoints[0][2] = sqrt(3.0 / 5.0);
+                integralPoints[1][2] = -1;
+                integralPoints[2][2] = 5.0 / 9.0;
+            }
+            if (id == 2) {
+                integralPoints[0][0] = 1;
+                integralPoints[1][0] = - sqrt(3.0 / 5.0);
+                integralPoints[2][0] = 5.0 / 9.0;
+
+                integralPoints[0][1] = 1;
+                integralPoints[1][1] = 0;
+                integralPoints[2][1] = 8.0 / 9.0;
+
+                integralPoints[0][2] = 1;
+                integralPoints[1][2] = sqrt(3.0 / 5.0);
+                integralPoints[2][2] = 5.0 / 9.0;
+            }
+            if (id == 3) {
+                integralPoints[0][0] = sqrt(3.0 / 5.0);
+                integralPoints[1][0] = 1;
+                integralPoints[2][0] = 5.0 / 9.0;
+
+                integralPoints[0][1] = 0;
+                integralPoints[1][1] = 1;
+                integralPoints[2][1] = 8.0 / 9.0;
+
+                integralPoints[0][2] = - sqrt(3.0 / 5.0);
+                integralPoints[1][2] = 1;
+                integralPoints[2][2] = 5.0 / 9.0;
+            }
+            if (id == 4) {
+                integralPoints[0][0] = -1;
+                integralPoints[1][0] = sqrt(3.0 / 5.0);
+                integralPoints[2][0] = 5.0 / 9.0;
+
+                integralPoints[0][1] = -1;
+                integralPoints[1][1] = 0;
+                integralPoints[2][1] = 8.0 / 9.0;
+
+                integralPoints[0][2] = -1;
+                integralPoints[1][2] = - sqrt(3.0 / 5.0);
+                integralPoints[2][2] = 5.0 / 9.0;
+            }
+        }
     }
 
-    public void calculateHbcMatrix(double alfa){
+    public void calculateHbcMatrix(){
         for(int i = 0 ; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
                 if(BC) {
-                    hbcMatrix[i][j] = alfa * (integralPoints[2][0] * shapeFunctionValues[0][i] * shapeFunctionValues[0][j] + integralPoints[2][1] * shapeFunctionValues[1][i] * shapeFunctionValues[1][j]) * length / 2;
+                    if(GlobalData.integralPointsNumber == 2){
+                        hbcMatrix[i][j] = GlobalData.alfa * (integralPoints[2][0] * shapeFunctionValues[0][i] * shapeFunctionValues[0][j] + integralPoints[2][1] * shapeFunctionValues[1][i] * shapeFunctionValues[1][j]) * length / 2;
+                    }
+                    else if(GlobalData.integralPointsNumber == 3) {
+                        hbcMatrix[i][j] = GlobalData.alfa * (integralPoints[2][0] * shapeFunctionValues[0][i] * shapeFunctionValues[0][j] + integralPoints[2][1] * shapeFunctionValues[1][i] * shapeFunctionValues[1][j] + integralPoints[2][2] * shapeFunctionValues[2][i] * shapeFunctionValues[2][j]) * length/2;
+                    }
                 }
                 else {
                     hbcMatrix[i][j] = 0.0;
@@ -97,10 +154,15 @@ public class Side {
         }
     }
 
-    public void calculatePVector(double tot, double alfa) {
+    public void calculatePVector() {
         for(int i = 0; i < 4; i++) {
             if(BC) {
-                pVector[i] = alfa * (shapeFunctionValues[0][i] + shapeFunctionValues[1][i]) * tot * length / 2;
+                if(GlobalData.integralPointsNumber == 2) {
+                    pVector[i] = GlobalData.alfa * (shapeFunctionValues[0][i] * integralPoints[2][0] + shapeFunctionValues[1][i] * integralPoints[2][1]) * GlobalData.tot * length / 2;
+                }
+                else if(GlobalData.integralPointsNumber == 3) {
+                    pVector[i] = GlobalData.alfa * (shapeFunctionValues[0][i] * integralPoints[2][0] + shapeFunctionValues[1][i] * integralPoints[2][1] + shapeFunctionValues[2][i] * integralPoints[2][2]) * GlobalData.tot * length / 2;
+                }
             }
             else {
                 pVector[i] = 0.0;
@@ -113,6 +175,6 @@ public class Side {
     }
 
     public double[] getPVector() {
-        return  pVector;
+        return pVector;
     }
 }
